@@ -23,18 +23,28 @@ router.get("/schedulings/:id", async (req, res) => {
   } catch (error) {
     res.send(
       JSON.stringify({
-        message: error.message,
+        message: error.message
       })
     );
   }
 });
 
 router.put("/schedulings/:id", async (req, res) => {
-  const id = req.params.id;
-  const dataBody = req.body;
-  const data = Object.assign({}, dataBody, { id: id });
-  const scheduling = new Scheduling(data);
-  await scheduling.edit();
+  try {
+    const id = req.params.id;
+    const dataBody = req.body;
+    const data = Object.assign({}, dataBody, { id: id });
+    const scheduling = new Scheduling(data);
+    await scheduling.edit();
+    await scheduling.search();
+    res.send(JSON.stringify(scheduling));
+  } catch {
+    res.send(
+      JSON.stringify({
+        message: error.message
+      })
+    );
+  }
 });
 
 router.delete("/schedulings/:id", async (req, res) => {
@@ -50,7 +60,7 @@ router.delete("/schedulings/:id", async (req, res) => {
   } catch (error) {
     res.send(
       JSON.stringify({
-        message: error.message,
+        message: error.message
       })
     );
   }

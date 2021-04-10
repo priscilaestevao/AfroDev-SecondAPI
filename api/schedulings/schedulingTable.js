@@ -1,30 +1,49 @@
-const { removeAllListeners } = require("nodemon");
 const modelScheduling = require("./modelSchedulingTable");
 
 module.exports = {
   async list() {
-    return await modelScheduling.findAll({
-      raw: true,
-    });
+    try {
+      return await modelScheduling.findAll({
+        raw: true,
+      });
+    } catch (error) {
+      throw error;
+    }
   },
 
   async add(scheduling) {
-    return await modelScheduling.create(scheduling);
+    try {
+      return await modelScheduling.create(scheduling);
+    } catch (error) {
+      throw error;
+    }
   },
 
   async searchByPK(id) {
-    return await modelScheduling.findByPk(id);
+    try {
+      return await modelScheduling.findByPk(id);
+    } catch (error) {
+      throw error;
+    }
   },
 
   async remove(id) {
-    return await modelScheduling.destroy({
-      where: { id: id },
-    });
+    try {
+      return await modelScheduling.destroy({
+        where: { id: id },
+      });
+    } catch (error) {
+      throw error;
+    }
   },
 
   async edit(id, data) {
-    return await modelScheduling.update(data, {
-      where: { id: id },
-    });
-  }
+    try {
+      return await modelScheduling.update(data, {
+        where: { id: id },
+      });
+    } catch (error) {
+      throw error;
+    }
+  },
 };

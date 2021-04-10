@@ -1,17 +1,31 @@
 const router = require("express").Router();
 const schedulingTable = require("../../schedulings/schedulingTable");
-const Scheduling = require("../../schedulings/schedulingClass");
+const Scheduling = require("../../schedulings/Scheduling");
+const SchedulingSerializer = require("../../Serialize").SchedulingSerializer;
 
 router.get("/schedulings", async (req, res) => {
-  const results = await schedulingTable.list();
-  res.send(JSON.stringify(results));
+  try {
+    const results = await schedulingTable.list();
+    const serializer = new SchedulingSerializer(
+      res.getHeader("Content-Type"),
+      ["service_name"]
+    );
+    schedulings = serializer.transform(results);
+    res.status(200).send(schedulings);
+  } catch (error) {
+    res.send(error);
+  }
 });
 
 router.post("/schedulings", async (req, res) => {
-  const reqSchedule = req.body;
-  const scheduling = new Scheduling(reqSchedule);
-  await scheduling.create();
-  res.send(JSON.stringify(scheduling));
+  try {
+    const reqSchedule = req.body;
+    const scheduling = new Scheduling(reqSchedule);
+    await scheduling.create();
+    res.send(JSON.stringify(scheduling));
+  } catch (error) {
+    return error;
+  }
 });
 
 router.get("/schedulings/:id", async (req, res) => {
@@ -23,7 +37,7 @@ router.get("/schedulings/:id", async (req, res) => {
   } catch (error) {
     res.send(
       JSON.stringify({
-        message: error.message
+        message: error.message,
       })
     );
   }
@@ -41,7 +55,7 @@ router.put("/schedulings/:id", async (req, res) => {
   } catch {
     res.send(
       JSON.stringify({
-        message: error.message
+        message: error.message,
       })
     );
   }
@@ -60,7 +74,7 @@ router.delete("/schedulings/:id", async (req, res) => {
   } catch (error) {
     res.send(
       JSON.stringify({
-        message: error.message
+        message: error.message,
       })
     );
   }

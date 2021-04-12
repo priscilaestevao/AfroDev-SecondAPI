@@ -28,4 +28,4 @@ const sequelizeOptions = {
   updatedAt: "update_date",
 };
 
-module.exports = instancedb.define("scheduling", columns, sequelizeOptions);
+module.exports = instancedb.define("AfroDev", columns, sequelizeOptions);

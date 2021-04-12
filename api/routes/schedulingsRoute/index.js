@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const schedulingTable = require("../../schedulings/schedulingTable");
 const Scheduling = require("../../schedulings/Scheduling");
-const SchedulingSerializer = require("../../Serialize").SchedulingSerializer;
+const SchedulingSerializer = require("../../Serialize").SerializeScheduling;
 
 router.get("/schedulings", async (req, res) => {
   try {

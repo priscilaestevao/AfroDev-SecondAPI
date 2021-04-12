@@ -28,7 +28,7 @@ class Serialize {
 
     if (Array.isArray(data)) {
       filteredData = data.map((information) => {
-        return this.filteredFields(information);
+        return this.filterFields(information);
       });
     }
 
@@ -49,5 +49,5 @@ class SerializeScheduling extends Serialize {
 module.exports = {
   Serialize: Serialize,
   SerializeScheduling: SerializeScheduling,
-  ValidsFormats: ["aplication/json"],
+  ValidsFormats: ["application/json"],
 };

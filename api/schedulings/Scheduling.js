@@ -1,4 +1,6 @@
+const InvalidField = require("../errors/InvalidField");
 const SchedulingTable = require("./schedulingTable");
+const DataNotReported = require("../errors/DataNotReported");
 
 class Scheduling {
   constructor({
@@ -20,6 +22,7 @@ class Scheduling {
   }
 
   async create() {
+    this.validate();
     const result = await SchedulingTable.add({
       client_name: this.client_name,
       service_name: this.service_name,
@@ -46,9 +49,10 @@ class Scheduling {
   }
 
   async edit() {
+    this.validate();
     await SchedulingTable.searchByPK(this.id);
     const updatableFields = [
-      "cliente_name",
+      "client_name",
       "service_name",
       "status",
       "scheduling_date",
@@ -61,7 +65,27 @@ class Scheduling {
         dataToUpdate[field] = value;
       }
     });
+
+    if (Object.keys(dataToUpdate).length === 0) {
+      throw new DataNotReported();
+    }
+
     await SchedulingTable.edit(this.id, dataToUpdate);
+  };
+
+  validate() {
+    const requiredFields = [
+      "client_name",
+      "service_name",
+      "status",
+      "scheduling_date",
+    ];
+    requiredFields.forEach((field) => {
+      const value = this[field];
+      if (typeof value !== "string" || value.length === 0) {
+        throw new InvalidField(field);
+      }
+    });
   }
 }
 

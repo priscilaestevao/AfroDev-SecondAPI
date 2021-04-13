@@ -40,14 +40,27 @@ class SerializeScheduling extends Serialize {
   constructor(contentType, customizableFields) {
     super();
     this.contentType = contentType;
-    this.allowedFields = ["id", "client_name", "scheduling_date"].concat(
-      customizableFields || []
-    );
+    this.allowedFields = [
+      "id", "client_name", "scheduling_date"
+    ].concat(customizableFields || []);
+  };
+};
+
+class SerializeError extends Serialize {
+  constructor(contentType, customizableFields) {
+    super();
+    this.contentType = contentType;
+    this.allowedFields = [
+      "id", "message"
+    ].concat(customizableFields || []);
+    this.tag = "Error";
+    this.tagList = "Errors"
   };
 };
 
 module.exports = {
   Serialize: Serialize,
   SerializeScheduling: SerializeScheduling,
+  SerializeError: SerializeError,
   ValidsFormats: ["application/json"],
 };

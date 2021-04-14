@@ -1,16 +1,36 @@
 const InvalidFormat = require("./errors/InvalidFormat");
+const jsontoxml = require("jsontoxml");
 
 class Serialize {
   json(data) {
     return JSON.stringify(data);
-  };
+  }
+
+  xml(data) {
+    if (Array.isArray(data)) {
+      data = data.map((item) => {
+        return {
+          [this.tag]: item
+        };
+      });
+      this.tag = this.tagList;
+    }
+    return jsontoxml({
+      [this.tag]: data
+    });
+  }
 
   transform(data) {
-    if (this.contentType !== "application/json") {
-      throw new InvalidFormat(this.contentType);
+    data = this.filter(data)
+    if (this.contentType === "application/json") {
+      return this.json(data);
     }
-    return this.json(this.filter(data));
-  };
+    if (this.contentType === "application/xml") {
+      return this.xml(data)
+    }
+
+    throw new InvalidFormat(this.contentType);
+  }
 
   filterFields(data) {
     const filteredFields = {};
@@ -21,7 +41,7 @@ class Serialize {
     });
 
     return filteredFields;
-  };
+  }
 
   filter(data) {
     let filteredData = this.filterFields(data);
@@ -33,34 +53,50 @@ class Serialize {
     }
 
     return filteredData;
-  };
-};
+  }
+}
 
 class SerializeScheduling extends Serialize {
   constructor(contentType, customizableFields) {
     super();
     this.contentType = contentType;
-    this.allowedFields = [
-      "id", "client_name", "scheduling_date"
-    ].concat(customizableFields || []);
-  };
-};
+    this.allowedFields = ["id", "client_name", "scheduling_date"].concat(
+      customizableFields || []
+    );
+    this.tag = "Scheduling";
+    this.tagList = "Schedulings";
+  }
+}
 
 class SerializeError extends Serialize {
   constructor(contentType, customizableFields) {
     super();
     this.contentType = contentType;
-    this.allowedFields = [
-      "id", "message"
-    ].concat(customizableFields || []);
+    this.allowedFields = ["id", "message"].concat(
+      customizableFields || []
+    );
     this.tag = "Error";
-    this.tagList = "Errors"
-  };
-};
+    this.tagList = "Errors";
+  }
+}
+
+class SerializeUser extends Serialize {
+  constructor(contentType, customizableFields) {
+    super();
+    this.contentType = contentType;
+    this.allowedFields = ["id", "name", "email", "password"].concat(
+      customizableFields || []
+    );
+    this.tag = "User";
+    this.tagList = "Users";
+  }
+}
+
 
 module.exports = {
   Serialize: Serialize,
   SerializeScheduling: SerializeScheduling,
   SerializeError: SerializeError,
-  ValidsFormats: ["application/json"],
+  SerializeUser: SerializeUser,
+  ValidsFormats: ["application/json", "application/xml"],
 };

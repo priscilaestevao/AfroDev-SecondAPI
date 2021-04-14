@@ -1,5 +1,7 @@
 const express = require("express");
-const router = require("../routes/schedulingsRoute");
+const routesScheduling = require("../routes/schedulingsRoute");
+const routesUser = require("../routes/usersRoute");
+const routesLogin = require("../routes/login");
 const ValidsFormats = require("../Serialize").ValidsFormats;
 const InvalidField = require("../errors/InvalidField");
 const DataNotReported = require("../errors/DataNotReported");
@@ -24,7 +26,9 @@ module.exports = () => {
     next();
   });
   app.use(express.json());
-  app.use("/salon", router);
+  app.use("/salon", routesScheduling);
+  app.use("/salon", routesUser);
+  app.use("/salon", routesLogin);
   app.use((error, req, res, next) => {
     let status = 500;
     if (error instanceof InvalidField || error instanceof DataNotReported) {

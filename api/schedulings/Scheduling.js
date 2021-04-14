@@ -1,6 +1,7 @@
 const InvalidField = require("../errors/InvalidField");
 const SchedulingTable = require("./schedulingTable");
 const DataNotReported = require("../errors/DataNotReported");
+const NotFound = require("../errors/NotFound");
 
 class Scheduling {
   constructor({
@@ -36,6 +37,9 @@ class Scheduling {
 
   async search() {
     const result = await SchedulingTable.searchByPK(this.id);
+    if (!result) {
+      throw new NotFound();
+    }
     this.client_name = result.client_name;
     this.service_name = result.service_name;
     this.status = result.status;
@@ -49,7 +53,6 @@ class Scheduling {
   }
 
   async edit() {
-    this.validate();
     await SchedulingTable.searchByPK(this.id);
     const updatableFields = [
       "client_name",

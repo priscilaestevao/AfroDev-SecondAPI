@@ -1,9 +1,18 @@
-const ModelTableScheduling = require("../schedulingsModel/modelSchedulingTable");
+const ModelSchedulingTable = require("../schedulings/modelSchedulingTable");
+const ModelUserTable = require("../users/modelUserTable");
 
-ModelTableScheduling.sync()
+ModelSchedulingTable.sync()
   .then(() => {
     console.log("Table created successfully!");
   })
-  .catch(
-    console.log("Error! Table not created.")
-  );
+  .catch((error) => {
+    console.log("Error! Table not created.", error)
+  })
+
+  ModelUserTable.sync()
+  .then(() => {
+    console.log("Table created successfully!");
+  })
+  .catch((error) => {
+    console.log("Error! Table not created.", error)
+  });

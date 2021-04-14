@@ -53,7 +53,7 @@ router.put("/schedulings/:id", async (req, res, next) => {
     const dataBody = req.body;
     const data = Object.assign({}, dataBody, { id: id });
     const scheduling = new Scheduling(data);
-    await scheduling.update();
+    await scheduling.edit();
     res.status(204).send();
   } catch (error) {
    next(error);

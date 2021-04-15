@@ -54,7 +54,7 @@ class Serialize {
 
     return filteredData;
   }
-}
+};
 
 class SerializeScheduling extends Serialize {
   constructor(contentType, customizableFields) {
@@ -66,7 +66,7 @@ class SerializeScheduling extends Serialize {
     this.tag = "Scheduling";
     this.tagList = "Schedulings";
   }
-}
+};
 
 class SerializeError extends Serialize {
   constructor(contentType, customizableFields) {
@@ -78,7 +78,7 @@ class SerializeError extends Serialize {
     this.tag = "Error";
     this.tagList = "Errors";
   }
-}
+};
 
 class SerializeUser extends Serialize {
   constructor(contentType, customizableFields) {
@@ -90,7 +90,7 @@ class SerializeUser extends Serialize {
     this.tag = "User";
     this.tagList = "Users";
   }
-}
+};
 
 
 module.exports = {

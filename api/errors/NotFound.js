@@ -1,6 +1,6 @@
 class NotFound extends Error {
-  constructor() {
-    const message = "Schedule not found!";
+  constructor(classType) {
+    const message = `${classType} not found!`;
     super(message);
     this.name = "NotFound";
     this.idError = 4;

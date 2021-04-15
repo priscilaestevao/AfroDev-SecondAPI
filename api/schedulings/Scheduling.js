@@ -1,18 +1,10 @@
 const InvalidField = require("../errors/InvalidField");
-const SchedulingTable = require("./schedulingTable");
+const SchedulingTable = require("./SchedulingTable");
 const DataNotReported = require("../errors/DataNotReported");
 const NotFound = require("../errors/NotFound");
 
 class Scheduling {
-  constructor({
-    id,
-    client_name,
-    service_name,
-    status,
-    scheduling_date,
-    creation_date,
-    update_date,
-  }) {
+  constructor({ id, client_name, service_name, status, scheduling_date, creation_date, update_date }) {
     this.id = id;
     this.client_name = client_name;
     this.service_name = service_name;
@@ -35,10 +27,10 @@ class Scheduling {
     this.update_date = result.update_date;
   }
 
-  async search() {
-    const result = await SchedulingTable.searchByPK(this.id);
+  async searchById() {
+    const result = await SchedulingTable.searchByPk(this.id);
     if (!result) {
-      throw new NotFound();
+      throw new NotFound("Scheduling");
     }
     this.client_name = result.client_name;
     this.service_name = result.service_name;
@@ -48,18 +40,12 @@ class Scheduling {
     this.update_date = result.update_date;
   }
 
-  async remove() {
-    await SchedulingTable.remove(this.id);
-  }
-
-  async edit() {
-    await SchedulingTable.searchByPK(this.id);
-    const updatableFields = [
-      "client_name",
-      "service_name",
-      "status",
-      "scheduling_date",
-    ];
+  async update() {
+    const result = await SchedulingTable.searchByPk(this.id);
+    if (!result) {
+      throw new NotFound("Scheduling");
+    }
+    const updatableFields = ["client_name", "service_name", "status", "scheduling_date"];
     const dataToUpdate = {};
 
     updatableFields.forEach((field) => {
@@ -72,24 +58,25 @@ class Scheduling {
     if (Object.keys(dataToUpdate).length === 0) {
       throw new DataNotReported();
     }
+    this.validate();
 
-    await SchedulingTable.edit(this.id, dataToUpdate);
+    await SchedulingTable.update(this.id, dataToUpdate);
+  };
+
+  async remove() {
+    await SchedulingTable.remove(this.id);
   };
 
   validate() {
-    const requiredFields = [
-      "client_name",
-      "service_name",
-      "status",
-      "scheduling_date",
-    ];
+    const requiredFields = ["client_name", "service_name", "status", "scheduling_date"];
+    
     requiredFields.forEach((field) => {
       const value = this[field];
       if (typeof value !== "string" || value.length === 0) {
         throw new InvalidField(field);
       }
     });
-  }
-}
+  };
+};
 
 module.exports = Scheduling;

@@ -19,9 +19,19 @@ module.exports = {
     }
   },
 
-  async searchByPK(id) {
+  async searchByPk(id) {
     try {
       return await modelScheduling.findByPk(id);
+    } catch (error) {
+      throw error;
+    }
+  },
+
+  async update(id, data) {
+    try {
+      return await modelScheduling.update(data, {
+        where: { id: id },
+      });
     } catch (error) {
       throw error;
     }
@@ -35,15 +45,5 @@ module.exports = {
     } catch (error) {
       throw error;
     }
-  },
-
-  async edit(id, data) {
-    try {
-      return await modelScheduling.update(data, {
-        where: { id: id },
-      });
-    } catch (error) {
-      throw error;
-    }
-  },
+  }
 };

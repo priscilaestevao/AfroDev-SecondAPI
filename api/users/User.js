@@ -1,3 +1,4 @@
+const bcrypt = require("bcrypt");
 const InvalidField = require("../errors/InvalidField");
 const UserTable = require("./UserTable");
 const MinQuantField = require("../errors/MinQuantField");
@@ -18,10 +19,11 @@ class User {
 
   async create() {
     this.validate();
+    await this.addPassword();
     const result = await UserTable.add({
       name: this.name,
       email: this.email,
-      password: this.password,
+      password: this.passwordHash,
     });
     this.id = result.id;
     this.creation_date = result.creation_date;
@@ -96,6 +98,15 @@ class User {
         throw new MaxQuantField(field);
       };
     });
+  };
+
+  async generateHash(field) {
+    const saltRounds = 12
+    return await bcrypt.hash(field, saltRounds);
+  };
+
+  async addPassword() {
+    this.passwordHash = await this.generateHash(this.password);
   };
 };
 

@@ -8,6 +8,7 @@ const DataNotReported = require("../errors/DataNotReported");
 const NotFound = require("../errors/NotFound");
 const InvalidFormat = require("../errors/InvalidFormat");
 const SerializeError = require("../Serialize").SerializeError;
+const passport = require("../users/authentication");
 
 module.exports = () => {
   const app = express();
@@ -28,7 +29,7 @@ module.exports = () => {
   app.use(express.json());
   app.use("/salon", routesScheduling);
   app.use("/salon", routesUser);
-//  app.use("/salon", routesLogin);
+  app.use("/salon", routesLogin);
   app.use((error, req, res, next) => {
     let status = 500;
     if (error instanceof InvalidField || error instanceof DataNotReported) {

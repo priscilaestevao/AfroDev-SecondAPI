@@ -1,14 +1,14 @@
 const express = require("express");
-const routesScheduling = require("../routes/schedulingsRoute");
-const routesUser = require("../routes/usersRoute");
-const routesLogin = require("../routes/login");
-const ValidsFormats = require("../Serialize").ValidsFormats;
+const routesScheduling = require("../api/schedulingsRoute/index");
+const routesUser = require("../api/usersRoute/index");
+const routesLogin = require("../api/loginRoute/index");
+const ValidsFormats = require("../shared/Serialize").ValidsFormats;
 const InvalidField = require("../errors/InvalidField");
 const DataNotReported = require("../errors/DataNotReported");
 const NotFound = require("../errors/NotFound");
 const InvalidFormat = require("../errors/InvalidFormat");
-const SerializeError = require("../Serialize").SerializeError;
-const passport = require("../users/authentication");
+const SerializeError = require("../shared/Serialize").SerializeError;
+const passport = require("./authentication");
 
 module.exports = () => {
   const app = express();

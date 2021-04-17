@@ -3,7 +3,7 @@ const passport = require("passport");
 const jwt = require("jsonwebtoken");
 const LocalStrategy = require("passport-local").Strategy;
 const BearerStrategy = require("passport-http-bearer").Strategy;
-const User = require("./User");
+const User = require("../services/users/User");
 const InvalidLogin = require("../errors/InvalidLogin");
 const NotFound = require("../errors/NotFound");
 

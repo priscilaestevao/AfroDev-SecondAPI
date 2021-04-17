@@ -1,11 +1,11 @@
 const router = require("express").Router();
 const passport = require("passport");
-const userController = require("../../users/userController");
+const loginService = require("../../services/login/index");
 
 router.post(
   "/login",
   passport.authenticate("local", { session: false }),
-  userController.login
+  loginService.login
 );
 
 module.exports = router;

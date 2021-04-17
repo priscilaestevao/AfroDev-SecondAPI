@@ -1,7 +1,7 @@
-const InvalidField = require("../errors/InvalidField");
-const SchedulingTable = require("./SchedulingTable");
-const DataNotReported = require("../errors/DataNotReported");
-const NotFound = require("../errors/NotFound");
+const SchedulingTable = require("../../models/schedulings/SchedulingTable");
+const InvalidField = require("../../errors/InvalidField");
+const DataNotReported = require("../../errors/DataNotReported");
+const NotFound = require("../../errors/NotFound");
 
 class Scheduling {
   constructor({ id, client_name, service_name, status, scheduling_date, creation_date, update_date }) {
@@ -64,6 +64,10 @@ class Scheduling {
   };
 
   async remove() {
+    const result = await SchedulingTable.searchByPk(this.id);
+    if (!result) {
+      throw new NotFound("Scheduling");
+    }
     await SchedulingTable.remove(this.id);
   };
 

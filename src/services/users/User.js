@@ -1,10 +1,10 @@
 const bcrypt = require("bcrypt");
-const InvalidField = require("../errors/InvalidField");
-const UserTable = require("./UserTable");
-const MinQuantField = require("../errors/MinQuantField");
-const MaxQuantField = require("../errors/MaxQuantField");
-const NotFound = require("../errors/NotFound");
-const DataNotReported = require("../errors/DataNotReported");
+const UserTable = require("../../models/users/UserTable");
+const InvalidField = require("../../errors/InvalidField");
+const NotFound = require("../../errors/NotFound");
+const DataNotReported = require("../../errors/DataNotReported");
+const MinQuantField = require("../../errors/MinQuantField");
+const MaxQuantField = require("../../errors/MaxQuantField");
 
 class User {
   constructor({ id, name, email, password, creation_date, update_date }) {
@@ -31,7 +31,7 @@ class User {
   };
 
   async searchById() {
-    const result = await UserTable.searchByPK(this.id);
+    const result = await UserTable.searchByPk(this.id);
     if (!result) {
       throw new NotFound("User");
     }
@@ -78,6 +78,10 @@ class User {
   };
 
   async remove() {
+    const result = await UserTable.searchByPk(this.id);
+    if (!result) {
+      throw new NotFound("User");
+    }
     await UserTable.remove(this.id);
   };
 
